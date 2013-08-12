@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QTextCodec>
 #include <QTextDocument>
-#include <QtWebKit>
 #include "dirwidget.h"
 
 namespace Ui {
@@ -32,7 +31,7 @@ private:
 //    QList<BBSRecord> records;
     DirWidget*  m_dirWidget;
     MyWebView*   m_webview;
-    QTextDocument* m_article;
+//    QTextDocument* m_article;
 };
 
 #endif // MAINWINDOW_H

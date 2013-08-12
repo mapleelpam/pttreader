@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain(QLatin1String("maple.tw"));
     QCoreApplication::setApplicationName(QLatin1String("Visioneering"));
 
-
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

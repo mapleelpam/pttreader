@@ -1,14 +1,25 @@
 #ifndef MYWEBVIEW_H
 #define MYWEBVIEW_H
 
-#include <QWebView>
 
-class MyWebView : public QWebView
+#define USE_TEXT_BROWSER
+
+#ifdef USE_TEXT_BROWSER
+#include <QTextBrowser>
+class MyWebView : public QTextBrowser
+#else
+#include <QWebView>
+class MyWebView : public QWebView        
+#endif
 {
     Q_OBJECT
 public:
     MyWebView(QWidget* parent);
 
+#ifdef USE_TEXT_BROWSER
+    void load(QUrl url) {   this->setSource(url);   }
+#endif
+    void loadFontSettings();
 signals:
     void sigLeaveThisView();
 private slots:
