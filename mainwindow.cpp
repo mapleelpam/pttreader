@@ -15,10 +15,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_dirWidget = new DirWidget(this);
     ui->stackedWidget->addWidget(m_dirWidget);
 
-    m_article = new QTextDocument(this);
+//    m_article = new QTextDocument(this);
 //    ui->stackedWidget->addWidget(m_article);
 
-    m_webview = new MyWebView(this);
+    m_webview = new MyWebView(ui->stackedWidget);
     ui->stackedWidget->addWidget(m_webview);
 
 //    processDotDir();
@@ -82,6 +82,7 @@ void MainWindow::on_actionFont_triggered()
     if( ok ) {
 //        m_dirWidget->setFont(font);
         m_dirWidget->loadFontSettings();
+        m_webview->loadFontSettings();
     }
 }
 

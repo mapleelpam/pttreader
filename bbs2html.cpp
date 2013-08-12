@@ -290,7 +290,7 @@ woju
 "\n"
 "<BODY background=\"%s\" %s"
 ">\n"
-"<center>"
+"<center><font color=\"white\">"
 "\n<table><tr><td><pre><hr>"
            , st.st_mtime, title, ART_BACKGROUND,
              ART_COLOR );
@@ -311,7 +311,7 @@ woju
    /* ========== end html ============= */
    if( ansi_blink ) fprintf( fo, "</blink>" );
    if( ansi_on ) fprintf( fo, "</FONT>" );
-   fprintf( fo, "</pre></td></tr></table></center>%s", ART_END );
+   fprintf( fo, "</pre></td></tr></table></font></center>%s", ART_END );
 
    fclose( fi ); fclose( fo );
    return 0;
