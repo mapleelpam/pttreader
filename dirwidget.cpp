@@ -6,8 +6,9 @@
 
 
 
-QString str_selected(QLatin1String("O"));
-QString str_unselected(QLatin1String(" "));
+QString str_selected(QLatin1String("  O  "));
+QString str_unselected(QLatin1String("     "));
+const uint text_margin = 3;
 
 
 DirWidget::DirWidget(QWidget *parent) :
@@ -58,17 +59,26 @@ void DirWidget::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     QFont font = painter.font();
-    int rows = ( widgetRect.height() / font.pointSize() -  2);
+    int rows = ( widgetRect.height() / (font.pointSize()+text_margin) -  2);
 
 //    qDebug() << "rows = "<<rows<<widgetRect.height()<<font.pointSize();
 
     int m_draw_start = int(m_current_records/rows) * rows;
 //    qDebug() << "m_draw_start "<<m_draw_start<<rows<<m_current_records;
 
-    for(  int pos_y = font.pointSize()+2, idx = m_draw_start ; idx <= m_draw_start+rows && idx < m_records.size() ; idx ++ ) {
+    for(  int pos_y = font.pointSize()+text_margin, idx = m_draw_start ; idx < m_draw_start+rows && idx < m_records.size() ; idx ++ ) {
 //        qDebug() << idx << m_records[idx].title;
-        painter.drawText( 0, pos_y, getALineString(m_records[idx], idx == m_current_records)+ " " +QString::number(idx) );
-        pos_y += font.pointSize();
+        if(idx == m_current_records) {
+            painter.save();
+            painter.setBrush(QBrush(Qt::black));
+            painter.setPen(QPen(Qt::white));
+            painter.drawRect( 0, pos_y+text_margin, widgetRect.width(), -(font.pointSize()+text_margin) );
+            painter.drawText( 0, pos_y, getALineString(m_records[idx], idx == m_current_records)+ " " );
+            painter.restore();
+        } else {
+            painter.drawText( 0, pos_y, getALineString(m_records[idx], idx == m_current_records)+ " " );
+        }
+        pos_y += font.pointSize() + text_margin;
     }
 }
 
@@ -85,15 +95,12 @@ void DirWidget::cursorUp()
 {
     m_current_records = (m_current_records-1 < 0 ) ? 0 : m_current_records-1;
     repaint();
-//    qDebug() << m_current_records << " user press up";
 }
 
 void DirWidget::cursorDown()
 {
     m_current_records = (m_current_records+1 >= m_records.size()) ? m_records.size()-1 : m_current_records+1;
     repaint();
-//    qDebug() << m_current_records << " user press down";
-
 }
 
 void DirWidget::enterArticle()

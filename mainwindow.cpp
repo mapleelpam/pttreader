@@ -35,7 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( m_dirWidget, SIGNAL(sigReadFile(const QString)) , SLOT(slotReadFile(const QString)) );
     connect( m_webview, SIGNAL(sigLeaveThisView()), this, SLOT(slotSwitchToOutline()) );
 
-
+    connect( ui->actionZoomIn, SIGNAL(triggered()), m_webview, SLOT(slotZoomIn()) );
+    connect( ui->actionZoomOut, SIGNAL(triggered()), m_webview, SLOT(slotZoomOut()) );
 }
 
 MainWindow::~MainWindow()

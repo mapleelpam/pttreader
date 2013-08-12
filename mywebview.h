@@ -13,6 +13,9 @@ signals:
     void sigLeaveThisView();
 private slots:
     void slotLeaveThisView();
+
+    void slotZoomIn();
+    void slotZoomOut();
 protected:
 //    void keyPressEvent ( QKeyEvent * ev );
 };
