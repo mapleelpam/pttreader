@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <QtCore>
+#include <QTextCodec>
 
 #define MAX_WORDS 1000
 
@@ -231,7 +233,7 @@ void add_href( char *l )
    strcpy( l, tag );
 }
 
-int BBS2Html::ann2html( const char *bbsfile, const char *htmlfile, char *tit )
+int BBS2Html::ann2htmlFile( const char *bbsfile, const char *htmlfile, char *tit )
 {
    char l1[MAX_WORDS], title[MAX_WORDS];
    FILE *fi, *fo;
@@ -325,5 +327,73 @@ woju
    fprintf( fo, "</pre></td></tr></table></font></center>%s", ART_END );
 
    fclose( fi ); fclose( fo );
+   return 0;
+}
+
+int BBS2Html::ann2html( QString& out, const char *bbsfile, char *tit )
+{
+   char l1[MAX_WORDS], title[MAX_WORDS];
+   FILE *fi;
+//   /, *fo;
+   struct stat st;
+//   time_t htmltime;
+   QString lalala;
+   QTextCodec* big5codec = QTextCodec::codecForName("Big5");
+
+   if( (fi=fopen( bbsfile,"r")) == NULL )
+   {
+      printf( "ann2html: No input file: %s\n", bbsfile );
+      return 1;
+   }
+
+
+   ansi_on = 0;
+   ansi_blink = 0;
+   strcpy( title, tit );
+
+   ansi2tag( title );
+/*
+woju
+*/
+   ART_TITLE = title;
+
+   /* ========== html headers ============= */
+   out += lalala.sprintf(
+"<!-- BBS2HTML[%lu] Areicle by wcf@CCCA.NCTU.edu.tw  -->\n"
+"<HTML>"
+"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=big5\" />"
+"<HEAD>"
+"<TITLE>%s</TITLE>"
+"</HEAD>"
+"\n"
+"<BODY background=\"%s\" %s"
+">\n"
+"<center><font color=\"white\">"
+"\n<table><tr><td><pre><hr>"
+           , st.st_mtime, title, ART_BACKGROUND,
+             ART_COLOR );
+
+
+   /* ========== text body ============= */
+   while( fgets( l1, MAX_WORDS, fi) != NULL )
+   {
+      cut_cr( l1 );
+      ansi2tag( l1 );
+      add_href( l1 );
+
+      if( !strcmp( l1, "--" ) )
+         out += "<hr>";
+      else
+          out += big5codec->toUnicode(l1) + "\n";
+//                 lalala.sprintf( "%s\n", l1 );
+   }
+
+   /* ========== end html ============= */
+   if( ansi_blink ) out += QLatin1String("</blink>" );
+   if( ansi_on ) out += QLatin1String("</FONT>" );
+   out += lalala.sprintf( "</pre></td></tr></table></font></center>%s", ART_END );
+//   qDebug() << out ;
+   fclose( fi );
+//   fclose( fo );
    return 0;
 }
