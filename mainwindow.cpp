@@ -58,10 +58,12 @@ void MainWindow::slotReadFile(const QString filename)
 
     QString full_path = QLatin1String("/Users/maple/Downloads/command/")+filename;
     QString full_html_path = full_path+tr(".html");
+    QString full_html;
 
-    BBS2Html::ann2html( full_path.toLocal8Bit().constData(), full_html_path.toLocal8Bit().constData(), "hello");
+    BBS2Html::ann2html( full_html, full_path.toLocal8Bit().constData(), "hello");
+//    m_webview->load(QUrl(full_html_path));
 
-    m_webview->load(QUrl(full_html_path));
+    m_webview->setHtml( full_html );
     m_webview->show();
     ui->stackedWidget->setCurrentWidget(m_webview);
 }
