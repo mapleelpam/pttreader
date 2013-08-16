@@ -7,9 +7,9 @@
 #include <QFile>
 #include <QtGui>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     m_dirWidget = new DirWidget(this);
@@ -97,4 +97,14 @@ void MainWindow::on_actionOpenPath_triggered()
         settings.setValue(AppKeyBoardDir, dir);
         m_dirWidget->updateDirPath();
     }
+}
+
+void MainWindow::on_actionSearchTitle_triggered()
+{
+    bool ok = false;
+    QString title = QInputDialog::getText(this, tr("Search - "),
+                                         tr("Include  - "), QLineEdit::Normal,
+                                          tr(""), &ok);
+    if (ok && !title.isEmpty())
+        m_dirWidget->searchTitle(title);
 }
