@@ -3,13 +3,14 @@
 #include "bbs2html.h"
 #include "mywebview.h"
 #include "settings.h"
+#include "perefeencedialog.h"
 
 #include <QFile>
 #include <QtGui>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     m_dirWidget = new DirWidget(this);
@@ -76,7 +77,7 @@ void MainWindow::slotReadFile(const QString filename)
 //        m_webview->load(QUrl(full_html_path));
     }
     m_webview->show();
-    ui->stackedWidget->setCurrentWidget(m_webview);
+    ui->stackedWidget->setCurrentWidget (m_webview);
 }
 
 void MainWindow::slotSwitchToOutline()
@@ -84,28 +85,54 @@ void MainWindow::slotSwitchToOutline()
     ui->stackedWidget->setCurrentWidget(m_dirWidget);
 }
 
+void MainWindow::on_actionPerefeence_triggered()
+{
+    PerefeenceDialog dialog;
+    if( dialog.exec() == QDialog::Accepted ) {
+        m_dirWidget->loadSettings();
+        m_webview->loadFontSettings();
+    }
+}
+
 void MainWindow::on_actionFont_triggered()
 {
-    bool ok;
-    QFont font = QFontDialog::getFont(&ok, this);
-
     QSettings settings;
+    bool ok;
+    QFont font;
+
+    font.fromString(settings.value(AppkeyFont,this->font().toString()).toString());
+
+//    qDebug() << " font size " << font.pointSize() << font.pixelSize();
+    font = QFontDialog::getFont(&ok, this);
+//    qDebug() << "  -> " << settings.value(AppkeyFont,this->font().toString()).toString() << font.pointSize();
+
     settings.setValue(AppkeyFont, font.toString());
 
     if( ok ) {
 //        m_dirWidget->setFont(font);
-        m_dirWidget->loadFontSettings();
+        m_dirWidget->loadSettings();
         m_webview->loadFontSettings();
     }
 }
 
 void MainWindow::on_actionOpenPath_triggered()
 {
-    QString dir = QFileDialog::getExistingDirectory(this,tr("BBS File Path"));
+    QSettings settings;
+    QString dir = settings.value(AppKeyBoardDir).toString();
+    dir = QFileDialog::getExistingDirectory(this,tr("BBS File Path"));
 //    qDebug() << "dir "<<dir;
     if( dir != "" ) {
-        QSettings settings;
         settings.setValue(AppKeyBoardDir, dir);
         m_dirWidget->updateDirPath();
     }
+}
+
+void MainWindow::on_actionSearchTitle_triggered()
+{
+    bool ok = false;
+    QString title = QInputDialog::getText(this, tr("Search - "),
+                                         tr("Include  - "), QLineEdit::Normal,
+                                          tr(""), &ok);
+    if (ok && !title.isEmpty())
+        m_dirWidget->searchTitle(title);
 }

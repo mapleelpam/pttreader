@@ -16,7 +16,8 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     dirwidget.cpp \
     bbs2html.cpp \
-    mywebview.cpp
+    mywebview.cpp \
+    perefeencedialog.cpp
 
 HEADERS  += mainwindow.h pttstruct.h \
     fileheader.h \
@@ -24,6 +25,8 @@ HEADERS  += mainwindow.h pttstruct.h \
     bbsrecord.h \
     bbs2html.h \
     mywebview.h \
-    settings.h
+    settings.h \
+    perefeencedialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    perefeencedialog.ui

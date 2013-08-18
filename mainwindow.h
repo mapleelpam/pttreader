@@ -24,6 +24,8 @@ public slots:
     void slotSwitchToOutline();
     void on_actionFont_triggered();
     void on_actionOpenPath_triggered();
+    void on_actionSearchTitle_triggered();
+    void on_actionPerefeence_triggered();
 private slots:
     void slotReadFile(const QString);
 private:
