@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setOrganizationName(QLatin1String("maple"));
     QCoreApplication::setOrganizationDomain(QLatin1String("maple.tw"));
-    QCoreApplication::setApplicationName(QLatin1String("Visioneering"));
+    QCoreApplication::setApplicationName(QLatin1String("PttReader"));
 
     QApplication a(argc, argv);
     MainWindow w;

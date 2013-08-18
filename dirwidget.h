@@ -33,6 +33,8 @@ private slots:
     void cursorDown();
     void cursorPageUp();
     void cursorPageDown();
+    void cursorHome();
+    void cursorEnd();
     void enterArticle();
     void leaveSearch();
 

@@ -8,7 +8,7 @@
 
 QString str_selected(QLatin1String("  O  "));
 QString str_unselected(QLatin1String("     "));
-const uint text_margin = 3;
+const uint text_margin = 6;
 
 
 DirWidget::DirWidget(QWidget *parent) :
@@ -39,6 +39,16 @@ DirWidget::DirWidget(QWidget *parent) :
     action->setShortcut(QKeySequence(Qt::Key_Right));
     addAction(action);
     connect(action,SIGNAL(triggered()) , this, SLOT(enterArticle()));
+
+    action = new QAction(this);
+    action->setShortcut(QKeySequence(Qt::Key_Home));
+    addAction(action);
+    connect(action,SIGNAL(triggered()) , this, SLOT(cursorHome()));
+
+    action = new QAction(this);
+    action->setShortcut(QKeySequence(Qt::Key_End));
+    addAction(action);
+    connect(action,SIGNAL(triggered()) , this, SLOT(cursorEnd()));
 
 
     action = new QAction(this);
@@ -77,6 +87,9 @@ void DirWidget::paintEvent(QPaintEvent *event)
     QRect widgetRect = rect();
 
     QPainter painter(this);
+
+    painter.fillRect( widgetRect, QBrush(Qt::black) );
+
     QFont font = painter.font();
     int num_of_raws = ( widgetRect.height() / (font.pointSize()+text_margin) -  2);
     m_cp->num_of_raws = num_of_raws;
@@ -86,20 +99,23 @@ void DirWidget::paintEvent(QPaintEvent *event)
     int draw_start = int(m_cp->current_records/num_of_raws) * num_of_raws;
 //    qDebug() << "m_draw_start "<<m_draw_start<<rows<<m_current_records;
 
+    painter.setPen(QPen(Qt::white));
     for(  int pos_y = font.pointSize()+text_margin, idx = draw_start
           ; idx < draw_start+num_of_raws && idx < m_cp->records.size() ; idx ++ ) {
 //        qDebug() << idx << m_records[idx].title;
         if(idx == m_cp->current_records) {
             painter.save();
             painter.setBrush(QBrush(Qt::black));
-            painter.setPen(QPen(Qt::white));
+            painter.setPen(QPen(Qt::black));
             painter.drawRect( 0, pos_y+text_margin, widgetRect.width(), -(font.pointSize()+text_margin) );
+            painter.setPen(QPen(QColor(0xCDFEFF)));
             painter.drawText( 0, pos_y, getALineString(m_cp->records[idx], idx == m_cp->current_records)+ " " );
             painter.restore();
         } else {
             painter.drawText( 0, pos_y, getALineString(m_cp->records[idx], idx == m_cp->current_records)+ " " );
         }
         pos_y += font.pointSize() + text_margin;
+//        qDebug() << " font "<<font.pixelSize()<<font.pointSize()<< pos_y;
     }
 }
 
@@ -137,10 +153,22 @@ void DirWidget::cursorPageDown()
     repaint();
 }
 
+void DirWidget::cursorHome()
+{
+    m_cp->cursorHome();
+    repaint();
+}
+
+void DirWidget::cursorEnd()
+{
+    m_cp->cursorEnd();
+    repaint();
+}
+
 void DirWidget::enterArticle()
 {
     qDebug() <<" enterArticle ";
-    emit sigReadFile( m_records.records[m_records.current_records].filename );
+    emit sigReadFile( m_cp->records[m_cp->current_records].filename );
 }
 
 void DirWidget::leaveSearch()

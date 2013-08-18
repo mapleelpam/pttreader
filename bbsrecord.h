@@ -44,7 +44,6 @@ struct BBSRecordList{
         current_records = (current_records+1 >= records.size()) ? records.size()-1 : current_records+1;
     }
 
-
     void cursorPageUp()
     {
         current_records = (current_records-num_of_raws < 0 ) ? 0 : current_records-num_of_raws;
@@ -53,6 +52,16 @@ struct BBSRecordList{
     void cursorPageDown()
     {
         current_records = (current_records+num_of_raws >= records.size()) ? records.size()-1 : current_records+num_of_raws;
+    }
+
+    void cursorHome()
+    {
+        current_records = 0;
+    }
+
+    void cursorEnd()
+    {
+        current_records = records.size() - 1;
     }
 };
 
