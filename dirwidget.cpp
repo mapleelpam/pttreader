@@ -8,7 +8,7 @@
 
 QString str_selected(QLatin1String("  O  "));
 QString str_unselected(QLatin1String("     "));
-const uint text_margin = 6;
+//const uint text_margin = 6;
 
 
 DirWidget::DirWidget(QWidget *parent) :
@@ -61,16 +61,20 @@ DirWidget::DirWidget(QWidget *parent) :
 
     setFocus();
 
-    loadFontSettings();
+    loadSettings();
 }
 
-void DirWidget::loadFontSettings()
+void DirWidget::loadSettings()
 {
-    QSettings settings;
+//    QSettings settings;
     QFont font;
-    font.fromString(settings.value(AppkeyFont,this->font().toString()).toString());
-
+//    font.fromString(settings.value(AppkeyFont,this->font().toString()).toString());
+    font = GlobalSettings::systemFont(this->font());
     setFont(font);
+
+    m_text_margin = GlobalSettings::MenuTextMargin();
+    m_foreground_color = GlobalSettings::MenuForegroundColor();
+    m_background_color = GlobalSettings::MenuBackgroundColor();
 }
 
 /*
@@ -88,10 +92,10 @@ void DirWidget::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
 
-    painter.fillRect( widgetRect, QBrush(Qt::black) );
+    painter.fillRect( widgetRect, QBrush(m_background_color) );
 
     QFont font = painter.font();
-    int num_of_raws = ( widgetRect.height() / (font.pointSize()+text_margin) -  2);
+    int num_of_raws = ( widgetRect.height() / (font.pointSize()+m_text_margin) -  2);
     m_cp->num_of_raws = num_of_raws;
 
 //    qDebug() << "rows = "<<rows<<widgetRect.height()<<font.pointSize();
@@ -99,22 +103,22 @@ void DirWidget::paintEvent(QPaintEvent *event)
     int draw_start = int(m_cp->current_records/num_of_raws) * num_of_raws;
 //    qDebug() << "m_draw_start "<<m_draw_start<<rows<<m_current_records;
 
-    painter.setPen(QPen(Qt::white));
-    for(  int pos_y = font.pointSize()+text_margin, idx = draw_start
+    painter.setPen(QPen(m_foreground_color));
+    for(  int pos_y = font.pointSize()+m_text_margin, idx = draw_start
           ; idx < draw_start+num_of_raws && idx < m_cp->records.size() ; idx ++ ) {
 //        qDebug() << idx << m_records[idx].title;
         if(idx == m_cp->current_records) {
             painter.save();
-            painter.setBrush(QBrush(Qt::black));
-            painter.setPen(QPen(Qt::black));
-            painter.drawRect( 0, pos_y+text_margin, widgetRect.width(), -(font.pointSize()+text_margin) );
+            painter.setBrush(QBrush(m_background_color));
+            painter.setPen(QPen(m_background_color));
+            painter.drawRect( 0, pos_y+m_text_margin, widgetRect.width(), -(font.pointSize()+m_text_margin) );
             painter.setPen(QPen(QColor(0xCDFEFF)));
             painter.drawText( 0, pos_y, getALineString(m_cp->records[idx], idx == m_cp->current_records)+ " " );
             painter.restore();
         } else {
             painter.drawText( 0, pos_y, getALineString(m_cp->records[idx], idx == m_cp->current_records)+ " " );
         }
-        pos_y += font.pointSize() + text_margin;
+        pos_y += font.pointSize() + m_text_margin;
 //        qDebug() << " font "<<font.pixelSize()<<font.pointSize()<< pos_y;
     }
 }

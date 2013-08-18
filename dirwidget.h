@@ -17,7 +17,7 @@ public:
 
 //    void setBBSRecords(QList<BBSRecord>& records);
 
-    void loadFontSettings();
+    void loadSettings();
     void updateDirPath();
 
     void searchTitle( const QString& );
@@ -53,7 +53,9 @@ private:
     BBSRecordList   *m_cp; //Current Processing
 
     QTextCodec *m_big5Codec;
-
+    uint m_text_margin;
+    QColor m_foreground_color;
+    QColor m_background_color;
 //    uint        m_num_of_raws;
 };
 

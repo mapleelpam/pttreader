@@ -50,6 +50,7 @@
      <string>Settings</string>
     </property>
     <addaction name="actionFont"/>
+    <addaction name="actionPerefeence"/>
    </widget>
    <widget class="QMenu" name="menuZoom">
     <property name="title">
@@ -110,6 +111,11 @@
    </property>
    <property name="shortcut">
     <string>/</string>
+   </property>
+  </action>
+  <action name="actionPerefeence">
+   <property name="text">
+    <string>Perefeence</string>
    </property>
   </action>
  </widget>

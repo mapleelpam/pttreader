@@ -3,6 +3,7 @@
 #include "bbs2html.h"
 #include "mywebview.h"
 #include "settings.h"
+#include "perefeencedialog.h"
 
 #include <QFile>
 #include <QtGui>
@@ -73,6 +74,15 @@ void MainWindow::slotSwitchToOutline()
     ui->stackedWidget->setCurrentWidget(m_dirWidget);
 }
 
+void MainWindow::on_actionPerefeence_triggered()
+{
+    PerefeenceDialog dialog;
+    if( dialog.exec() == QDialog::Accepted ) {
+        m_dirWidget->loadSettings();
+        m_webview->loadFontSettings();
+    }
+}
+
 void MainWindow::on_actionFont_triggered()
 {
     QSettings settings;
@@ -89,7 +99,7 @@ void MainWindow::on_actionFont_triggered()
 
     if( ok ) {
 //        m_dirWidget->setFont(font);
-        m_dirWidget->loadFontSettings();
+        m_dirWidget->loadSettings();
         m_webview->loadFontSettings();
     }
 }
