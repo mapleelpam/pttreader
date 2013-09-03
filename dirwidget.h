@@ -25,6 +25,7 @@ public:
 
 signals:
     void sigReadFile( const QString );
+    void sigEditFile( const QString );
 
 public slots:
 
@@ -37,6 +38,7 @@ private slots:
     void cursorEnd();
     void enterArticle();
     void leaveSearch();
+    void gotoEdit();
 
 protected:
     void paintEvent(QPaintEvent *event);

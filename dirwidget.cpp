@@ -50,12 +50,15 @@ DirWidget::DirWidget(QWidget *parent) :
     addAction(action);
     connect(action,SIGNAL(triggered()) , this, SLOT(cursorEnd()));
 
-
     action = new QAction(this);
     action->setShortcut(QKeySequence(Qt::Key_Left));
     addAction(action);
     connect(action,SIGNAL(triggered()) , this, SLOT(leaveSearch()));
 
+    action = new QAction(this);
+    action->setShortcut(QKeySequence(Qt::Key_E));
+    addAction(action);
+    connect(action,SIGNAL(triggered()) , this, SLOT(gotoEdit()));
 
     UiModeSwitchToNormal();
 
@@ -178,6 +181,12 @@ void DirWidget::enterArticle()
 void DirWidget::leaveSearch()
 {
     UiModeSwitchToNormal();
+}
+
+void DirWidget::gotoEdit()
+{
+    qDebug() << " DirWidget::gotoEdit() ";
+    emit sigEditFile( m_cp->records[m_cp->current_records].filename );
 }
 
 void DirWidget::processDotDir( const QString& dir )

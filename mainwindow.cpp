@@ -22,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent)
     m_webview = new MyWebView(ui->stackedWidget);
     ui->stackedWidget->addWidget(m_webview);
 
+    m_textEdit = new QTextEdit( ui->stackedWidget );
+    ui->stackedWidget->addWidget(m_textEdit);
+
+
 //    processDotDir();
 
 //    m_dirWidget->setBBSRecords(records);
@@ -34,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentWidget(m_dirWidget);
 
     connect( m_dirWidget, SIGNAL(sigReadFile(const QString)) , SLOT(slotReadFile(const QString)) );
+    connect( m_dirWidget, SIGNAL(sigEditFile(const QString)) , SLOT(slotEditFile(const QString)) );
     connect( m_webview, SIGNAL(sigLeaveThisView()), this, SLOT(slotSwitchToOutline()) );
 
     connect( ui->actionZoomIn, SIGNAL(triggered()), m_webview, SLOT(slotZoomIn()) );
@@ -69,6 +74,18 @@ void MainWindow::slotReadFile(const QString filename)
     ui->stackedWidget->setCurrentWidget (m_webview);
 }
 
+void MainWindow::slotEditFile(const QString filename)
+{
+    QString full_path = QLatin1String("/Users/maple/Downloads/command/")+filename;
+    QString full_html_path = full_path+tr(".html");
+    QString full_html;
+
+    BBS2Html::ann2html( full_html, full_path.toLocal8Bit().constData(), "hello");
+
+    m_textEdit->setHtml(full_html);
+    m_textEdit->setStyleSheet("background-color: black; color : white");
+    ui->stackedWidget->setCurrentWidget( m_textEdit );
+}
 void MainWindow::slotSwitchToOutline()
 {
     ui->stackedWidget->setCurrentWidget(m_dirWidget);

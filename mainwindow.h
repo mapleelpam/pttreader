@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTextCodec>
 #include <QTextDocument>
+#include <QTextEdit>
 #include "dirwidget.h"
 
 namespace Ui {
@@ -28,11 +29,13 @@ public slots:
     void on_actionPerefeence_triggered();
 private slots:
     void slotReadFile(const QString);
+    void slotEditFile(const QString);
 private:
     Ui::MainWindow *ui;
 //    QList<BBSRecord> records;
     DirWidget*  m_dirWidget;
     MyWebView*   m_webview;
+    QTextEdit*  m_textEdit;
 //    QTextDocument* m_article;
 };
 
