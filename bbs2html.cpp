@@ -237,7 +237,9 @@ int BBS2Html::ann2htmlFile( const char *bbsfile, const char *htmlfile, char *tit
 {
    char l1[MAX_WORDS], title[MAX_WORDS];
    FILE *fi, *fo;
+#ifdef WIN32
    struct stat st;
+#endif
    time_t htmltime;
 
    if( (fi=fopen( bbsfile,"r")) == NULL )
@@ -245,6 +247,7 @@ int BBS2Html::ann2htmlFile( const char *bbsfile, const char *htmlfile, char *tit
       printf( "ann2html: No input file: %s\n", bbsfile );
       return 1;
    }
+#ifndef WIN32
    lstat( bbsfile, &st );
 
    if( fo=fopen( htmlfile,"r") )
@@ -261,6 +264,8 @@ int BBS2Html::ann2htmlFile( const char *bbsfile, const char *htmlfile, char *tit
       }
       fclose(fo);
    }
+#endif
+
 
    printf("file %s -> %s\n", bbsfile, htmlfile);
 
@@ -294,7 +299,13 @@ woju
 ">\n"
 "<center><font color=\"white\">"
 "\n<table><tr><td><pre><hr>"
-           , st.st_mtime, title, ART_BACKGROUND,
+         #ifndef WIN32
+           , st.st_mtime
+         #else
+            , 0
+         #endif
+
+            , title, ART_BACKGROUND,
              ART_COLOR );
 
 

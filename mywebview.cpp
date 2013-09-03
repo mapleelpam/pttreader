@@ -9,7 +9,7 @@ MyWebView::MyWebView(QWidget* parent)
     : QWebView(parent)
 #endif
 {
-    qDebug() << "in my web vew";
+//    qDebug() << "in my web vew";
     QAction* action = new QAction(this);
     action->setShortcut(QKeySequence(Qt::Key_Left));
     addAction(action);

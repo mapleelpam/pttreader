@@ -8,8 +8,6 @@
 
 QString str_selected(QLatin1String("  O  "));
 QString str_unselected(QLatin1String("     "));
-//const uint text_margin = 6;
-
 
 DirWidget::DirWidget(QWidget *parent) :
     QWidget(parent)
@@ -112,9 +110,10 @@ void DirWidget::paintEvent(QPaintEvent *event)
 //        qDebug() << idx << m_records[idx].title;
         if(idx == m_cp->current_records) {
             painter.save();
+
             painter.setBrush(QBrush(m_background_color));
             painter.setPen(QPen(m_background_color));
-            painter.drawRect( 0, pos_y+m_text_margin, widgetRect.width(), -(font.pointSize()+m_text_margin) );
+            painter.drawRect( 0, pos_y+m_text_margin/2, widgetRect.width(), -(font.pointSize()+m_text_margin) );
             painter.setPen(QPen(QColor(0xCDFEFF)));
             painter.drawText( 0, pos_y, getALineString(m_cp->records[idx], idx == m_cp->current_records)+ " " );
             painter.restore();
@@ -193,12 +192,17 @@ void DirWidget::processDotDir( const QString& dir )
 {
 
 #ifdef WIN32
-    QFile file(dir+QLatin1String("\.DIR"));
+    QFile file(dir+QLatin1String("\\.DIR"));
 #else
     QFile file(dir+QLatin1String("/.DIR"));
 #endif
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    bool success =file.open(QIODevice::ReadOnly | QIODevice::Text);
 
+    if(success) {
+        qDebug() << "success";
+    } else {
+        qDebug() << "failed to open "<<file.fileName();
+    }
 //    qDebug() << "fileheader size "<<sizeof(fileheader_t)<<" filesize = "<<file.size()<<dir;
 
     m_records.clear();

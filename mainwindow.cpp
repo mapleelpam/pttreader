@@ -61,15 +61,26 @@ QString get_repeat_string( QString space, uint times )
 
 void MainWindow::slotReadFile(const QString filename)
 {
-
-    QString full_path = QLatin1String("/Users/maple/Downloads/command/")+filename;
+    QSettings settings;
+#ifdef WIN32
+    QString full_path = settings.value(AppKeyBoardDir).toString()+tr("\\")+filename;
+#else
+    QString full_path = settings.value(AppKeyBoardDir).toString()+tr("/")+filename;
+#endif
     QString full_html_path = full_path+tr(".html");
     QString full_html;
 
-    BBS2Html::ann2html( full_html, full_path.toLocal8Bit().constData(), "hello");
+//    int result = BBS2Html::ann2html( full_html, full_path.toLocal8Bit().constData(), "hello");
 //    m_webview->load(QUrl(full_html_path));
+//    int result = BBS2Html::ann2htmlFile( full_path.toLocal8Bit(), full_html_path.toLocal8Bit().constData(), "hello");
+    int result = BBS2Html::ann2html( full_html, full_path.toLocal8Bit(), "hello");
 
-    m_webview->setHtml( full_html );
+    if( result )
+        m_webview->setPlainText(tr("some trouble!? ")+full_path);
+    else {
+        m_webview->setHtml( full_html );
+//        m_webview->load(QUrl(full_html_path));
+    }
     m_webview->show();
     ui->stackedWidget->setCurrentWidget (m_webview);
 }
